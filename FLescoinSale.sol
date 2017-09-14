@@ -1,27 +1,24 @@
 pragma solidity ^0.4.11;
 
-import "./Lescoin.sol";
+import "./FLescoin.sol";
 
-contract LescoinPreSale {
+contract FLescoinSale {
     address public beneficiary;
     uint public ethPrice;
-    uint public bonus;
     uint public amountRaised;
-    Lescoin public tokenReward;
+    FLescoin public tokenReward;
 
-    uint constant public price = 50;
-    uint constant public minSaleAmount = 10000;
+    uint constant public price = 5000;
+    uint constant public minSaleAmount = 100000000;
 
-    function LescoinPreSale(
+    function FLescoinSale(
         address _beneficiary,
-        uint _ethPrice,
-        uint _bonus,   
-        Lescoin _addressOfToken
+        uint _ethPrice,        
+        FLescoin _addressOfToken
     ) {
         beneficiary = _beneficiary;
         ethPrice = _ethPrice;
-        bonus = _bonus;
-        tokenReward = Lescoin(_addressOfToken);
+        tokenReward = FLescoin(_addressOfToken);
     }
 
     function () payable {
@@ -29,7 +26,7 @@ contract LescoinPreSale {
         uint tokenAmount = amount * ethPrice / price / 1000000000000;
         if (tokenAmount < minSaleAmount) throw;
         amountRaised += amount;
-        tokenReward.transfer(msg.sender, tokenAmount * (100 + bonus) / 100);
+        tokenReward.transfer(msg.sender, tokenAmount);
     }
 
     function WithdrawETH(uint _amount) {
@@ -45,10 +42,5 @@ contract LescoinPreSale {
     function ChangeEthPrice(uint _ethPrice) {
         if (beneficiary != msg.sender) throw;
         ethPrice = _ethPrice;
-    }
-
-    function ChangeBonus(uint _bonus) {
-        if (beneficiary != msg.sender) throw;
-        bonus = _bonus;
     }
 }
