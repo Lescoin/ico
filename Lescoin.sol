@@ -9,13 +9,13 @@ contract Lescoin is BurnableToken, UpgradeableToken {
   string public symbol;
   uint public decimals;
 
-  function Lescoin(address _owner)  UpgradeableToken(_owner) {
+  function Lescoin(address _owner, address _init)  UpgradeableToken(_owner) {
     name = "Lescoin";
     symbol = "LSC";
     totalSupply = 200000000000000;
     decimals = 8;
 
-    // Allocate initial balance to the owner
-    balances[_owner] = totalSupply;
+    // Allocate initial balance to the init account
+    balances[_init] = totalSupply;
   }
 }

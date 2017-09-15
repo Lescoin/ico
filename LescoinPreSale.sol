@@ -4,6 +4,7 @@ import "./Lescoin.sol";
 
 contract LescoinPreSale {
     address public beneficiary;
+    address public coldWallet;
     uint public ethPrice;
     uint public bonus;
     uint public amountRaised;
@@ -14,11 +15,13 @@ contract LescoinPreSale {
 
     function LescoinPreSale(
         address _beneficiary,
+        address _coldWallet,
         uint _ethPrice,
         uint _bonus,   
         Lescoin _addressOfToken
     ) {
         beneficiary = _beneficiary;
+        coldWallet =  _coldWallet;
         ethPrice = _ethPrice;
         bonus = _bonus;
         tokenReward = Lescoin(_addressOfToken);
@@ -34,12 +37,17 @@ contract LescoinPreSale {
 
     function WithdrawETH(uint _amount) {
         if (beneficiary != msg.sender) throw;
-        beneficiary.transfer(_amount);
+        coldWallet.transfer(_amount);
     }
 
     function WithdrawTokens(uint _amount) {
         if (beneficiary != msg.sender) throw;
-        tokenReward.transfer(beneficiary, _amount);
+        tokenReward.transfer(coldWallet, _amount);
+    }
+
+    function TransferTokens(address _to, uint _amount) {
+        if (beneficiary != msg.sender) throw;
+        tokenReward.transfer(_to, _amount);
     }
 
     function ChangeEthPrice(uint _ethPrice) {

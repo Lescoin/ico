@@ -4,6 +4,7 @@ import "./FLescoin.sol";
 
 contract FLescoinSale {
     address public beneficiary;
+    address public coldWallet;
     uint public ethPrice;
     uint public amountRaised;
     FLescoin public tokenReward;
@@ -13,10 +14,12 @@ contract FLescoinSale {
 
     function FLescoinSale(
         address _beneficiary,
+        address _coldWallet,
         uint _ethPrice,        
         FLescoin _addressOfToken
     ) {
         beneficiary = _beneficiary;
+        coldWallet =  _coldWallet;
         ethPrice = _ethPrice;
         tokenReward = FLescoin(_addressOfToken);
     }
@@ -31,12 +34,17 @@ contract FLescoinSale {
 
     function WithdrawETH(uint _amount) {
         if (beneficiary != msg.sender) throw;
-        beneficiary.transfer(_amount);
+        coldWallet.transfer(_amount);
     }
 
     function WithdrawTokens(uint _amount) {
         if (beneficiary != msg.sender) throw;
-        tokenReward.transfer(beneficiary, _amount);
+        tokenReward.transfer(coldWallet, _amount);
+    }
+
+    function TransferTokens(address _to, uint _amount) {
+        if (beneficiary != msg.sender) throw;
+        tokenReward.transfer(_to, _amount);
     }
 
     function ChangeEthPrice(uint _ethPrice) {
